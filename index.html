@@ -70,7 +70,17 @@
     .nav-links { display: flex; gap: 28px; font-size: 13px; }
     .nav-links a { color: var(--muted); transition: color .15s; }
     .nav-links a:hover { color: var(--text); text-decoration: none; }
-    @media (max-width: 640px) { .nav-links { display: none; } }
+    @media (max-width: 640px) {
+      .nav-inner { flex-wrap: wrap; height: auto; padding: 10px 0; gap: 0; }
+      .nav-links {
+        display: flex; width: 100%; overflow-x: auto;
+        gap: 20px; padding: 8px 0 6px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .nav-links::-webkit-scrollbar { display: none; }
+      .nav-links a { white-space: nowrap; font-size: 13px; }
+    }
 
     /* ── Hero ── */
     .hero {
@@ -298,7 +308,7 @@
     <div class="eyebrow">For the Zano Community</div>
     <h1>Gift cards for crypto.<br><em>Built for Zano first.</em></h1>
     <p class="hero-sub">
-      CardsRelay is a full-stack digital gift card marketplace where customers spend cryptocurrency, launching within 1–2 weeks, with first-class support for Zano and exclusive discounts for every ZANO payment.
+      CardsRelay is a full-stack digital gift card marketplace where customers spend cryptocurrency. Currently in final testing, with first-class support for Zano, exclusive discounts for Zano payments, and marketing offers for the Zano community.
     </p>
     <div class="hero-cta">
       <a href="https://cardsrelay.com" target="_blank" class="btn btn-primary">Visit CardsRelay ↗</a>
@@ -336,7 +346,7 @@
     <p class="section-label">The Opportunity</p>
     <h2>A trillion-dollar market, <em>underserved by crypto</em></h2>
     <p class="section-intro">
-      The global gift card market is worth over $1 trillion annually. Crypto holders have limited ways to spend their holdings in the real world. Privacy coin holders have almost nowhere to go.
+      The global gift card market is worth over $1 trillion annually. While BTC, ETH and major stablecoins have growing global acceptance, privacy coin holders have far fewer options. For Zano holders in particular, there is almost nowhere to spend.
     </p>
     <div class="grid-2">
       <div class="card">
@@ -347,7 +357,7 @@
       <div class="card">
         <div class="feature-icon">🔒</div>
         <h3>Privacy coins are underserved</h3>
-        <p>While BTC and ETH have growing acceptance, privacy-focused coins like Zano have almost no merchant integrations. We've made ZANO a first-class payment option from day one, with a dedicated integration and exclusive holder discounts.</p>
+        <p>BTC, ETH and major stablecoins are increasingly accepted globally. Privacy coins like Zano, Monero and Dash remain underserved, with few merchant integrations and limited real-world spending options. CardsRelay bridges that gap, enabling privacy coin holders to spend through gift cards at thousands of brands worldwide.</p>
       </div>
       <div class="card">
         <div class="feature-icon">⚡</div>
@@ -377,7 +387,7 @@
         <h3>Where does CardsRelay fit in the landscape?</h3>
         <p>Platforms like ZanoBay and ZanoX have begun accepting Zano as a payment method, which is a positive sign for the ecosystem. However, both remain limited in scope and activity so far, with a smaller product catalogue and fewer regions than CardsRelay.</p>
         <p>CardsRelay is built on a purpose-built fulfilment engine with thousands of products across seven global regions, fully automated delivery, self-serve order management, and live integrations with two payment processors and two card suppliers from day one.</p>
-        <p>Additionally, <strong style="color:var(--text)">Freedom Dollar</strong> (the Zano ecosystem stablecoin) is not currently supported, as it is not yet available through CoinRemitter. Adding Freedom Dollar support is a top priority and will be implemented as soon as the integration becomes available.</p>
+        <p>While Freedom Dollar is not currently accepted, as it is not yet supported through CoinRemitter, adding support will be one of our top priorities.</p>
       </div>
       <div class="zano-compare">
         <div class="compare-item us">
@@ -393,8 +403,8 @@
           <span class="detail">Exchange-focused · limited gift card depth <span class="cross">–</span></span>
         </div>
         <div style="margin-top:8px; padding: 14px; background: var(--green-glow); border-radius: 8px; font-size: 13px; border: 1px solid var(--border-g);">
-          <strong style="color:var(--green-light)">ZANO Exclusive Discount</strong><br>
-          <span style="color:var(--muted)">ZANO payers receive an additional discount on every purchase. The only gift card platform in the world offering this incentive.</span>
+          <strong style="color:var(--green-light)">ZANO Exclusive Discounts</strong><br>
+          <span style="color:var(--muted)">Exclusive discounts available for ZANO payments, with daily deals published for the Zano community. The only gift card platform in the world offering ZANO holders dedicated incentives.</span>
         </div>
         <div style="padding: 14px; background: rgba(251,191,36,0.05); border-radius: 8px; font-size: 13px; border: 1px solid rgba(251,191,36,0.15);">
           <strong style="color:#fbbf24">Freedom Dollar: Coming Soon</strong><br>
@@ -422,12 +432,12 @@
       <div class="card card-green">
         <div class="feature-icon">🪙</div>
         <h3>200+ cryptocurrencies</h3>
-        <p>ZANO via a dedicated CoinRemitter integration. BTC, ETH, USDT, XRP, LTC, DOGE, BNB and 200+ more via NowPayments. One seamless checkout experience, whichever coin you hold.</p>
+        <p>ZANO via a dedicated CoinRemitter integration. BTC, ETH, USDT, XRP, LTC, DOGE, BNB, Monero (XMR), Dash, and 200+ more via NowPayments. Comprehensive support for privacy-focused users, whichever coin you hold.</p>
       </div>
       <div class="card card-green">
         <div class="feature-icon">🎁</div>
-        <h3>ZANO exclusive discount</h3>
-        <p>Customers paying with ZANO receive a bonus discount on top of standard pricing. A tangible incentive that no other gift card platform on earth offers ZANO holders.</p>
+        <h3>ZANO exclusive discounts</h3>
+        <p>Exclusive discounts are available for ZANO payments, with daily deals published specifically for the Zano community. A dedicated incentive that no other gift card platform on earth offers.</p>
       </div>
       <div class="card">
         <div class="feature-icon">📧</div>
@@ -537,6 +547,13 @@
             <p>Per-product, per-coin, per-region margin control. Service fees can be layered onto low-margin cards; enhanced discounts applied to high-margin products or for preferred payment methods like ZANO. Fully configurable without code changes.</p>
           </div>
         </div>
+        <div class="engine-item">
+          <div class="engine-dot"></div>
+          <div>
+            <h4>Security</h4>
+            <p>All payment webhooks are verified using cryptographic signatures before any order action is taken. Blockchain confirmation monitoring ensures payments are settled on-chain before fulfilment begins. Duplicate fulfilment protection prevents any gift code from being issued twice. Order state validation gates every fulfilment step, and transaction integrity is maintained end-to-end from payment receipt to code delivery.</p>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -629,7 +646,7 @@
     <p class="section-label">Roadmap</p>
     <h2>Where we are. <em>Where we're going.</em></h2>
     <p class="section-intro">
-      The core engine is built and in final sandbox testing across seven regions with two payment processors and two card suppliers, expected to launch within 1–2 weeks. The roadmap focuses on deepening the Zano integration, expanding reach, and building the marketing flywheel.
+      The core platform is built and in final sandbox testing. The roadmap focuses on deepening the Zano integration, expanding reach, and building the marketing flywheel.
     </p>
 
     <div class="roadmap">
@@ -637,16 +654,24 @@
         <div class="roadmap-marker done">✓</div>
         <div class="roadmap-body">
           <div class="tag tag-soon">In Testing</div>
-          <h4>Core platform: seven regions</h4>
-          <p>Full-stack gift card marketplace built and in final sandbox testing on cardsrelay.com. ZANO + 200 coins supported. 4,000+ products across USA, Canada, UK, Europe, Australia, Middle East, and India. Automated email delivery. Self-serve order tracking. Launch expected within 1–2 weeks.</p>
+          <h4>Core platform launch</h4>
+          <p>Full-stack gift card marketplace built and in final sandbox testing. 4,000+ products across seven regions: USA, Canada, UK, Europe, Australia, Middle East, and India. Automated email delivery and self-serve order tracking included from day one.</p>
         </div>
       </div>
       <div class="roadmap-item">
         <div class="roadmap-marker done">✓</div>
         <div class="roadmap-body">
           <div class="tag tag-soon">In Testing</div>
-          <h4>Dual inventory &amp; dual processor architecture</h4>
-          <p>Reloadly and Tillo integrated as joint launch inventory partners. CoinRemitter (ZANO) and NowPayments (200+ coins) fully integrated and in sandbox testing. Plug-and-play architecture ready for rapid onboarding of additional providers.</p>
+          <h4>Payment processing</h4>
+          <p>CoinRemitter integrated as the dedicated ZANO payment processor. NowPayments integrated for 200+ additional coins. Both processors are fully integrated and in sandbox testing, with a plug-and-play architecture ready for rapid onboarding of further providers.</p>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-marker done">✓</div>
+        <div class="roadmap-body">
+          <div class="tag tag-soon">In Testing</div>
+          <h4>Inventory partner integration</h4>
+          <p>Reloadly and Tillo integrated as joint launch inventory partners, providing supplier redundancy and broad brand coverage across all seven launch regions. Architecture supports rapid onboarding of additional card suppliers as the catalogue expands.</p>
         </div>
       </div>
       <div class="roadmap-item">
