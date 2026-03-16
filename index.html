@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CardsRelay — Built for Zano. Built for the World.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green:       #16a34a;
+      --green-light: #22c55e;
+      --green-glow:  rgba(22, 163, 74, 0.12);
+      --bg:          #060d09;
+      --bg-card:     #0b1610;
+      --bg-card2:    #0f1f14;
+      --border:      rgba(255,255,255,0.07);
+      --border-g:    rgba(22,163,74,0.25);
+      --text:        #f3f4f6;
+      --muted:       #9ca3af;
+      --subtle:      #4b5563;
+      --serif:       'DM Serif Display', Georgia, serif;
+      --mono:        'JetBrains Mono', 'Courier New', monospace;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--green-light); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Layout ── */
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+    .container--wide { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    section { padding: 80px 0; }
+    section + section { border-top: 1px solid var(--border); }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(6,13,9,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+    }
+    .nav-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 800; font-size: 18px; letter-spacing: -0.4px;
+      color: var(--text); text-decoration: none;
+    }
+    .logo-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: var(--green);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .logo span.relay { color: var(--green-light); }
+    .nav-links { display: flex; gap: 28px; font-size: 13px; }
+    .nav-links a { color: var(--muted); transition: color .15s; }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    @media (max-width: 640px) { .nav-links { display: none; } }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 100px 0 80px;
+      text-align: center;
+      background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(22,163,74,0.18) 0%, transparent 70%);
+    }
+    .eyebrow {
+      display: inline-block;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--green-light);
+      background: var(--green-glow); border: 1px solid var(--border-g);
+      padding: 5px 14px; border-radius: 999px; margin-bottom: 24px;
+    }
+    h1 {
+      font-family: var(--serif);
+      font-size: clamp(36px, 6vw, 62px);
+      line-height: 1.1; letter-spacing: -0.5px;
+      margin-bottom: 24px;
+    }
+    h1 em { font-style: normal; color: var(--green-light); }
+    .hero-sub {
+      font-size: clamp(16px, 2.5vw, 20px);
+      color: var(--muted); max-width: 620px;
+      margin: 0 auto 40px;
+      line-height: 1.6;
+    }
+    .hero-cta {
+      display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex; align-items: center;
+      padding: 12px 28px; border-radius: 8px;
+      font-size: 14px; font-weight: 600;
+      transition: all .15s; cursor: pointer; text-decoration: none;
+    }
+    .btn-primary { background: var(--green); color: white; border: 1px solid var(--green); }
+    .btn-primary:hover { background: #15803d; text-decoration: none; }
+    .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { border-color: var(--muted); text-decoration: none; }
+
+    /* ── Stat strip ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-top: 56px;
+    }
+    .stat { background: var(--bg-card); padding: 28px 20px; text-align: center; }
+    .stat-num { font-family: var(--serif); font-size: 34px; color: var(--green-light); line-height: 1; margin-bottom: 6px; }
+    .stat-label { font-size: 12px; color: var(--muted); font-weight: 500; }
+
+    /* ── Section headings ── */
+    .section-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--green); margin-bottom: 12px;
+    }
+    h2 {
+      font-family: var(--serif);
+      font-size: clamp(26px, 4vw, 40px);
+      line-height: 1.15; letter-spacing: -0.3px; margin-bottom: 16px;
+    }
+    h2 em { font-style: normal; color: var(--green-light); }
+    .section-intro {
+      font-size: 17px; color: var(--muted);
+      max-width: 640px; margin-bottom: 48px; line-height: 1.7;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 28px;
+    }
+    .card-green { border-color: var(--border-g); background: linear-gradient(135deg, var(--bg-card) 0%, rgba(22,163,74,0.05) 100%); }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    @media (max-width: 768px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+    .feature-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: var(--green-glow); border: 1px solid var(--border-g);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px; font-size: 18px;
+    }
+    .card h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+    .card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* ── Engine ── */
+    .engine-item {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 20px 0; border-bottom: 1px solid var(--border);
+    }
+    .engine-item:last-child { border-bottom: none; }
+    .engine-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex-shrink: 0; margin-top: 8px; }
+    .engine-item h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .engine-item p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+    /* ── Roadmap ── */
+    .roadmap { display: flex; flex-direction: column; }
+    .roadmap-item { display: flex; gap: 20px; padding: 0 0 32px; position: relative; }
+    .roadmap-item:last-child { padding-bottom: 0; }
+    .roadmap-item:not(:last-child)::after {
+      content: ''; position: absolute; left: 15px; top: 32px;
+      width: 2px; bottom: 0;
+      background: linear-gradient(to bottom, var(--border-g), var(--border));
+    }
+    .roadmap-marker {
+      width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+      border: 2px solid var(--border-g); background: var(--bg-card);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: var(--green-light);
+      position: relative; z-index: 1;
+    }
+    .roadmap-marker.done { background: var(--green-glow); border-color: var(--green); }
+    .roadmap-body h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; padding-top: 4px; }
+    .roadmap-body p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .tag {
+      display: inline-block; font-size: 10px; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 2px 8px; border-radius: 4px; margin-bottom: 6px;
+    }
+    .tag-live  { background: rgba(22,163,74,0.15);  color: var(--green-light); border: 1px solid var(--border-g); }
+    .tag-soon  { background: rgba(234,179,8,0.10);  color: #fbbf24;  border: 1px solid rgba(234,179,8,0.2); }
+    .tag-future{ background: rgba(99,102,241,0.10); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.2); }
+
+    /* ── Commercial ── */
+    .commercial {
+      background: linear-gradient(135deg, rgba(22,163,74,0.08) 0%, rgba(22,163,74,0.02) 100%);
+      border: 1px solid var(--border-g); border-radius: 16px; padding: 48px;
+    }
+    @media (max-width: 640px) { .commercial { padding: 28px; } }
+    .commercial-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; margin-top: 32px; }
+    @media (max-width: 640px) { .commercial-grid { grid-template-columns: 1fr; gap: 20px; } }
+    .commercial-item h3 { font-family: var(--serif); font-size: 32px; color: var(--green-light); margin-bottom: 4px; }
+    .commercial-item p { font-size: 13px; color: var(--muted); }
+
+    /* ── Zano callout ── */
+    .zano-callout {
+      background: var(--bg-card); border: 1px solid var(--border-g);
+      border-radius: 16px; padding: 40px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;
+    }
+    @media (max-width: 640px) { .zano-callout { grid-template-columns: 1fr; } }
+    .zano-callout h3 { font-family: var(--serif); font-size: 26px; margin-bottom: 12px; }
+    .zano-callout p { font-size: 14px; color: var(--muted); margin-bottom: 12px; line-height: 1.6; }
+    .zano-compare { display: flex; flex-direction: column; gap: 10px; }
+    .compare-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 14px; border-radius: 8px; font-size: 13px;
+    }
+    .compare-item.us { background: var(--green-glow); border: 1px solid var(--border-g); }
+    .compare-item.them { background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--muted); }
+    .compare-item span.name { font-weight: 600; }
+    .check { color: var(--green-light); font-weight: 700; }
+    .cross { color: var(--subtle); }
+
+    /* ── Regions ── */
+    .region-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+    .region-pill {
+      padding: 6px 16px; border-radius: 999px; font-size: 13px; font-weight: 500;
+      border: 1px solid var(--border-g); background: var(--green-glow); color: var(--text);
+    }
+    .region-pill.future { border-color: var(--border); background: rgba(255,255,255,0.03); color: var(--muted); }
+
+    /* ── Ask ── */
+    .ask-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 32px; }
+    @media (max-width: 640px) { .ask-grid { grid-template-columns: 1fr; } }
+    .ask-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; text-align: center; }
+    .ask-card .ask-icon { font-size: 28px; margin-bottom: 12px; }
+    .ask-card h4 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+    .ask-card p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+    /* ── Contact ── */
+    .contact-block { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 32px; }
+    .contact-item {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 16px 20px; font-size: 14px; font-weight: 500;
+    }
+    .contact-item .ci-icon { font-size: 20px; }
+    .contact-item a { color: var(--text); }
+    .contact-item a:hover { color: var(--green-light); text-decoration: none; }
+
+    /* ── Footer ── */
+    footer { border-top: 1px solid var(--border); padding: 32px 24px; text-align: center; font-size: 12px; color: var(--subtle); }
+
+    /* ── Misc ── */
+    .divider { width: 48px; height: 2px; background: var(--green); border-radius: 2px; margin-bottom: 24px; }
+    .hl { color: var(--green-light); }
+    .bold { font-weight: 600; color: var(--text); }
+  </style>
+</head>
+<body>
+
+<!-- ── Nav ── -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="6" width="20" height="14" rx="3" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.5"/>
+          <rect x="5" y="9" width="5" height="4" rx="1" fill="white" fill-opacity="0.9"/>
+          <rect x="5" y="15" width="10" height="1.5" rx="0.75" fill="white" fill-opacity="0.5"/>
+          <path d="M17 10.5 L21 12.5 L17 14.5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      Cards<span class="relay">Relay</span>
+    </a>
+    <div class="nav-links">
+      <a href="#opportunity">Opportunity</a>
+      <a href="#product">Product</a>
+      <a href="#engine">Engine</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow">For the Zano Community</div>
+    <h1>Gift cards for crypto.<br><em>Built for Zano first.</em></h1>
+    <p class="hero-sub">
+      CardsRelay is a full-stack digital gift card marketplace where customers spend cryptocurrency — with first-class support for Zano and exclusive discounts for every ZANO payment.
+    </p>
+    <div class="hero-cta">
+      <a href="https://cardsrelay.com" target="_blank" class="btn btn-primary">Visit CardsRelay ↗</a>
+      <a href="#contact" class="btn btn-secondary">Get in touch</a>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num">4,000+</div>
+        <div class="stat-label">Gift card products</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">200+</div>
+        <div class="stat-label">Supported coins</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">~4%</div>
+        <div class="stat-label">Average gross margin</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">7</div>
+        <div class="stat-label">Regions at launch</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">2+2</div>
+        <div class="stat-label">Processors &amp; suppliers</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── The Opportunity ── -->
+<section id="opportunity">
+  <div class="container">
+    <p class="section-label">The Opportunity</p>
+    <h2>A trillion-dollar market, <em>underserved by crypto</em></h2>
+    <p class="section-intro">
+      The global gift card market is worth over $1 trillion annually. Crypto holders have limited ways to spend their holdings in the real world. Privacy coin holders have almost nowhere to go.
+    </p>
+    <div class="grid-2">
+      <div class="card">
+        <div class="feature-icon">🌍</div>
+        <h3>Massive, growing market</h3>
+        <p>Gift cards are one of the most practical on-ramps to real-world spending. Brands like Amazon, Steam, Google Play, and hundreds more are redeemable globally — and now accessible with crypto through CardsRelay.</p>
+      </div>
+      <div class="card">
+        <div class="feature-icon">🔒</div>
+        <h3>Privacy coins are underserved</h3>
+        <p>While BTC and ETH have growing acceptance, privacy-focused coins like Zano have almost no merchant integrations. We've made ZANO a first-class payment option from day one — with a dedicated integration and exclusive holder discounts.</p>
+      </div>
+      <div class="card">
+        <div class="feature-icon">⚡</div>
+        <h3>Instant digital delivery</h3>
+        <p>No physical logistics. Gift card codes are delivered by email within seconds of on-chain payment confirmation. Fully automated, fully scalable — no manual fulfilment required at any volume.</p>
+      </div>
+      <div class="card">
+        <div class="feature-icon">⚙️</div>
+        <h3>Intelligent margin management</h3>
+        <p>Not all cards carry the same margin. The platform's built-in margin management system allows service fees to be applied on low-margin products and enhanced discounts on high-margin ones — including deeper discounts for ZANO payments. Margin is optimised per card, per coin, per region.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Zano Advantage ── -->
+<section id="zano">
+  <div class="container">
+    <p class="section-label">The Zano Advantage</p>
+    <h2>One of the only gift card platforms <em>on earth</em> that accepts ZANO</h2>
+    <p class="section-intro">
+      The Zano community is active, technically sophisticated, and actively seeks out products that support the ecosystem. CardsRelay is positioned to become the go-to spending platform for every ZANO holder.
+    </p>
+
+    <div class="zano-callout">
+      <div>
+        <h3>Where does CardsRelay fit in the landscape?</h3>
+        <p>Platforms like ZanoBay and ZanoX have begun accepting Zano as a payment method — a positive sign for the ecosystem. However, the gift card fulfilment infrastructure behind them remains limited in product range, delivery automation, and operational tooling.</p>
+        <p>CardsRelay is built on a purpose-built fulfilment engine with thousands of products across seven global regions, fully automated delivery, self-serve order management, and live integrations with two payment processors and two card suppliers from day one.</p>
+        <p>Additionally, <strong style="color:var(--text)">Freedom Dollar</strong> — the Zano ecosystem stablecoin — is not currently supported, as it is not yet available through CoinRemitter. Adding Freedom Dollar support is a top priority and will be implemented as soon as the integration becomes available.</p>
+      </div>
+      <div class="zano-compare">
+        <div class="compare-item us">
+          <span class="name">CardsRelay</span>
+          <span class="detail">4,000+ products · 7 regions · automated · full ops <span class="check">✓</span></span>
+        </div>
+        <div class="compare-item them">
+          <span class="name" style="color:var(--subtle)">ZanoBay</span>
+          <span class="detail">Limited catalogue · manual processing <span class="cross">–</span></span>
+        </div>
+        <div class="compare-item them">
+          <span class="name" style="color:var(--subtle)">ZanoX</span>
+          <span class="detail">Exchange-focused · limited gift card depth <span class="cross">–</span></span>
+        </div>
+        <div style="margin-top:8px; padding: 14px; background: var(--green-glow); border-radius: 8px; font-size: 13px; border: 1px solid var(--border-g);">
+          <strong style="color:var(--green-light)">ZANO Exclusive Discount</strong><br>
+          <span style="color:var(--muted)">ZANO payers receive an additional discount on every purchase — the only gift card platform in the world offering this incentive.</span>
+        </div>
+        <div style="padding: 14px; background: rgba(251,191,36,0.05); border-radius: 8px; font-size: 13px; border: 1px solid rgba(251,191,36,0.15);">
+          <strong style="color:#fbbf24">Freedom Dollar — Coming Soon</strong><br>
+          <span style="color:var(--muted)">Not yet supported — pending CoinRemitter integration. Adding FRDC support is our top Zano ecosystem priority.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Product ── -->
+<section id="product">
+  <div class="container">
+    <p class="section-label">The Product</p>
+    <h2>Everything a ZANO holder needs <em>to spend in the real world</em></h2>
+    <p class="section-intro">
+      Thousands of gift card products from global brands, delivered automatically, priced in crypto — across seven regions from day one.
+    </p>
+    <div class="grid-3">
+      <div class="card card-green">
+        <div class="feature-icon">💳</div>
+        <h3>4,000+ gift card products</h3>
+        <p>Amazon, Steam, Google Play, iTunes, Netflix, Uber, Airbnb, gaming vouchers, restaurant cards, and hundreds more — with brands spanning the US, UK, Canada, Europe, Australia, Middle East, and India.</p>
+      </div>
+      <div class="card card-green">
+        <div class="feature-icon">🪙</div>
+        <h3>200+ cryptocurrencies</h3>
+        <p>ZANO via a dedicated CoinRemitter integration. BTC, ETH, USDT, XRP, LTC, DOGE, BNB and 200+ more via NowPayments. One seamless checkout experience, whichever coin you hold.</p>
+      </div>
+      <div class="card card-green">
+        <div class="feature-icon">🎁</div>
+        <h3>ZANO exclusive discount</h3>
+        <p>Customers paying with ZANO receive a bonus discount on top of standard pricing. A tangible incentive that no other gift card platform on earth offers ZANO holders.</p>
+      </div>
+      <div class="card">
+        <div class="feature-icon">📧</div>
+        <h3>Instant email delivery</h3>
+        <p>Gift card codes delivered by email within seconds of on-chain payment confirmation. Fully automated end-to-end — no waiting, no manual step, regardless of volume.</p>
+      </div>
+      <div class="card">
+        <div class="feature-icon">🌍</div>
+        <h3>Seven regions at launch</h3>
+        <p>USA, Canada, UK, Europe, Australia, Middle East, and India live from day one. Products priced in local currency — USD, CAD, GBP, EUR, AUD, and more. Latam, Asia, and Africa to follow.</p>
+      </div>
+      <div class="card">
+        <div class="feature-icon">🔐</div>
+        <h3>Privacy-respecting checkout</h3>
+        <p>No account registration required. Email verification for delivery only — returning customers are recognised and skip the step entirely. Fast, minimal-friction checkout designed for crypto-native users.</p>
+      </div>
+    </div>
+
+    <!-- Region pills -->
+    <div style="margin-top: 40px;">
+      <p class="section-label" style="margin-bottom: 16px;">Geographic coverage</p>
+      <div class="region-grid">
+        <span class="region-pill">🇺🇸 United States</span>
+        <span class="region-pill">🇨🇦 Canada</span>
+        <span class="region-pill">🇬🇧 United Kingdom</span>
+        <span class="region-pill">🇪🇺 Europe</span>
+        <span class="region-pill">🇦🇺 Australia</span>
+        <span class="region-pill">🇦🇪 Middle East</span>
+        <span class="region-pill">🇮🇳 India</span>
+        <span class="region-pill future">🌎 Latin America — coming</span>
+        <span class="region-pill future">🌏 Asia — coming</span>
+        <span class="region-pill future">🌍 Africa — coming</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Engine ── -->
+<section id="engine">
+  <div class="container">
+    <p class="section-label">The Engine</p>
+    <h2>Production-grade infrastructure — <em>not a wrapper</em></h2>
+    <p class="section-intro">
+      CardsRelay is built on a custom fulfilment engine designed for reliability, automation, and rapid expansion. Adding a new payment processor or card supplier is a near-instant integration — the architecture accommodates new providers in hours, not weeks.
+    </p>
+
+    <div class="grid-2" style="margin-bottom: 24px;">
+      <div class="card">
+        <h3 style="margin-bottom:16px; font-size:14px; color:var(--muted); font-weight:500; text-transform:uppercase; letter-spacing:0.05em;">Integrations — Live at Launch</h3>
+        <div class="engine-item">
+          <div class="engine-dot"></div>
+          <div>
+            <h4>CoinRemitter — ZANO</h4>
+            <p>Dedicated payment processor for ZANO. Webhook-driven payment detection with cryptographic signature verification. The exclusive home of ZANO payments on CardsRelay.</p>
+          </div>
+        </div>
+        <div class="engine-item">
+          <div class="engine-dot"></div>
+          <div>
+            <h4>NowPayments — 200+ coins</h4>
+            <p>Handles all non-ZANO cryptocurrency payments. IPN webhook integration with HMAC-SHA512 verification. Real-time payment status updates across the full coin catalogue.</p>
+          </div>
+        </div>
+        <div class="engine-item">
+          <div class="engine-dot"></div>
+          <div>
+            <h4>Reloadly — Joint launch partner</h4>
+            <p>Gift card inventory partner from day one. 14,000+ products across 300+ brands in 170+ countries. OAuth2 authenticated. Orders placed and codes retrieved in under two seconds.</p>
+          </div>
+        </div>
+        <div class="engine-item">
+          <div class="engine-dot"></div>
+          <div>
+            <h4>Tillo — Joint launch partner</h4>
+            <p>Second gift card inventory partner, live from launch alongside Reloadly. Provides additional brand coverage and supplier redundancy — no single point of failure on card delivery.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom:16px; font-size:14px; color:var(--muted); font-weight:500; text-transform:uppercase; letter-spacing:0.05em;">Operational Features</h3>
+        <div class="engine-item">
+          <div class="engine-dot"></div>
+          <div>
+            <h4>Email verification at checkout</h4>
+            <p>First-time buyers verify their email before checkout via a magic-link flow. HMAC-signed persistent cookie means returning customers are recognised automatically — zero friction on repeat purchases.</p>
+          </div>
+        </div>
+        <div class="engine-item">
+          <div class="engine-dot"></div>
+          <div>
+            <h4>Self-serve order tracking</h4>
+            <p>Customers track their order in real time — payment confirmation, fulfilment status, and gift code retrieval. Email-gated for security. Designed to reduce support contact to near zero.</p>
+          </div>
+        </div>
+        <div class="engine-item">
+          <div class="engine-dot"></div>
+          <div>
+            <h4>Automated payment recovery</h4>
+            <p>Expired and partial payments trigger automated recovery emails with tailored next steps. Webhook-driven for NowPayments; daily reconciliation cron for CoinRemitter. No manual chase required.</p>
+          </div>
+        </div>
+        <div class="engine-item">
+          <div class="engine-dot"></div>
+          <div>
+            <h4>Margin management system</h4>
+            <p>Per-product, per-coin, per-region margin control. Service fees can be layered onto low-margin cards; enhanced discounts applied to high-margin products or for preferred payment methods like ZANO. Fully configurable without code changes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="background: linear-gradient(135deg, var(--bg-card) 0%, rgba(22,163,74,0.04) 100%); border-color: var(--border-g);">
+      <h3 style="margin-bottom: 12px;">Plug-and-play expansion</h3>
+      <p style="font-size: 14px; color: var(--muted); line-height: 1.7;">The integration layer is deliberately modular. A new payment processor or card supplier can be fully connected in hours — not weeks — because the engine's core does not need to change. Only a new adapter is required. This means every integration that comes after launch is faster and cheaper than the one before it. The architecture is built to scale outward, not to be rebuilt.</p>
+    </div>
+
+    <div class="card" style="margin-top: 20px;">
+      <h3 style="margin-bottom: 12px;">Ops Console</h3>
+      <p style="font-size: 14px; color: var(--muted);">A dedicated internal operations dashboard gives full visibility over every order, brand, and support case. Order diagnosis is automated — the console surfaces the issue and recommended next step for every open order, removing manual triage entirely. The same attention to detail as the customer-facing product.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Commercials ── -->
+<section id="commercials">
+  <div class="container">
+    <p class="section-label">Commercials</p>
+    <h2>Simple model. <em>Clear margin. Intelligent pricing.</em></h2>
+
+    <div class="commercial">
+      <p style="font-size: 17px; color: var(--muted); max-width: 640px; line-height: 1.7;">
+        CardsRelay earns the spread between the wholesale cost of gift cards and the price charged to customers. Discount rates vary by brand and region — the platform's built-in margin management system optimises pricing per product, applying service fees where margins are thin and enhanced discounts where margins are strong. Average gross margin across the catalogue is approximately <strong style="color: var(--green-light);">4% per transaction</strong>.
+      </p>
+      <div class="commercial-grid">
+        <div class="commercial-item">
+          <h3>~4%</h3>
+          <p>Average gross margin per order, actively managed across the product catalogue — not a fixed rate.</p>
+        </div>
+        <div class="commercial-item">
+          <h3>Zero</h3>
+          <p>Inventory risk. Gift cards are purchased on-demand at the moment a customer pays. No pre-purchasing, no write-offs.</p>
+        </div>
+        <div class="commercial-item">
+          <h3>Scales</h3>
+          <p>Fulfilment is fully automated. Revenue scales with traffic — not with headcount or operational cost.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Go to Market ── -->
+<section id="gtm">
+  <div class="container">
+    <p class="section-label">Go to Market</p>
+    <h2>Seeding in Zano. <em>Scaling outward.</em></h2>
+    <p class="section-intro">
+      The launch strategy starts where the product differentiation is strongest — the Zano community — and expands outward to the broader crypto audience and new geographies using automated marketing infrastructure.
+    </p>
+    <div class="grid-3">
+      <div class="card">
+        <div class="feature-icon">🌱</div>
+        <h3>Zano community seed</h3>
+        <p>Launch within the Zano ecosystem — forums, Discord, Telegram, community channels. The ZANO exclusive discount and dedicated integration creates genuine word-of-mouth among privacy coin advocates who actively support the tools that support them.</p>
+      </div>
+      <div class="card">
+        <div class="feature-icon">🤖</div>
+        <h3>Automated social presence</h3>
+        <p>Systematic outreach and content across X (Twitter), Reddit, and crypto communities — targeting users searching to spend specific coins. Programmatic, scalable, and targeted by coin and brand.</p>
+      </div>
+      <div class="card">
+        <div class="feature-icon">📬</div>
+        <h3>Email list development</h3>
+        <p>Every verified buyer becomes a permissioned marketing contact. Post-purchase sequences, new product alerts, and discount campaigns drive repeat purchases and build lifetime customer value.</p>
+      </div>
+      <div class="card">
+        <div class="feature-icon">🔗</div>
+        <h3>SEO &amp; intent-driven traffic</h3>
+        <p>Dedicated landing pages targeting "buy gift cards with [coin]" searches for every major cryptocurrency. High-intent, low-competition traffic that compounds with time and compounds across 200+ coins.</p>
+      </div>
+      <div class="card">
+        <div class="feature-icon">🤝</div>
+        <h3>Affiliate &amp; referral programme</h3>
+        <p>A structured affiliate programme is on the roadmap — enabling community members, content creators, and ecosystem partners to earn a share of margin on every referral they send to CardsRelay.</p>
+      </div>
+      <div class="card">
+        <div class="feature-icon">🌍</div>
+        <h3>Inventory partnerships — Latam, Asia, Africa</h3>
+        <p>Beyond the seven launch regions, expansion into Latin America, Asia, and Africa will be driven through targeted inventory partnerships — adding regional card suppliers to unlock local brand catalogues for each market.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Roadmap ── -->
+<section id="roadmap">
+  <div class="container">
+    <p class="section-label">Roadmap</p>
+    <h2>Where we are. <em>Where we're going.</em></h2>
+    <p class="section-intro">
+      The core engine is live across seven regions with two payment processors and two card suppliers. The roadmap focuses on deepening the Zano integration, expanding reach, and building the marketing flywheel.
+    </p>
+
+    <div class="roadmap">
+      <div class="roadmap-item">
+        <div class="roadmap-marker done">✓</div>
+        <div class="roadmap-body">
+          <div class="tag tag-live">Live</div>
+          <h4>Core platform — seven regions</h4>
+          <p>Full-stack gift card marketplace live on cardsrelay.com. ZANO + 200 coins supported. 4,000+ products across USA, Canada, UK, Europe, Australia, Middle East, and India. Automated email delivery. Self-serve order tracking.</p>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-marker done">✓</div>
+        <div class="roadmap-body">
+          <div class="tag tag-live">Live</div>
+          <h4>Dual inventory &amp; dual processor architecture</h4>
+          <p>Reloadly and Tillo live as joint launch inventory partners. CoinRemitter (ZANO) and NowPayments (200+ coins) both live and processing. Plug-and-play architecture ready for rapid onboarding of additional providers.</p>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-marker done">✓</div>
+        <div class="roadmap-body">
+          <div class="tag tag-live">Live</div>
+          <h4>Operational infrastructure</h4>
+          <p>Email verification at checkout. Automated payment recovery emails. Margin management system. Internal ops console with automated order diagnosis. Reconciliation for missed payment webhooks.</p>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-marker">1</div>
+        <div class="roadmap-body">
+          <div class="tag tag-soon">Priority</div>
+          <h4>Freedom Dollar (FRDC) support</h4>
+          <p>Adding the Zano ecosystem stablecoin as a supported payment method is our top Zano-specific priority. Pending CoinRemitter making the integration available — we are actively monitoring and will implement immediately upon availability.</p>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-marker">2</div>
+        <div class="roadmap-body">
+          <div class="tag tag-soon">Near term</div>
+          <h4>Affiliate &amp; referral programme</h4>
+          <p>Enable community members and content creators to earn a share of margin on referrals. Particularly valuable for the Zano community, where peer recommendation drives adoption more effectively than advertising.</p>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-marker">3</div>
+        <div class="roadmap-body">
+          <div class="tag tag-soon">Near term</div>
+          <h4>Automated marketing infrastructure</h4>
+          <p>Systematic content and outreach across X, Reddit, and crypto communities. Email campaign automation for the growing verified buyer list. Targeting spend-intent searches per coin, per brand, per region.</p>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-marker">4</div>
+        <div class="roadmap-body">
+          <div class="tag tag-future">Future</div>
+          <h4>Expansion into Latam, Asia &amp; Africa</h4>
+          <p>New markets unlocked through targeted inventory partnerships — regional card suppliers added to bring local brand catalogues to each geography. Each new region expands the addressable audience without rebuilding the platform.</p>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-marker">5</div>
+        <div class="roadmap-body">
+          <div class="tag tag-future">Future</div>
+          <h4>Zano wallet integration</h4>
+          <p>Direct integration with the Zano wallet — enabling one-click gift card purchases from within the wallet UI. A deep ecosystem partnership that would make CardsRelay the native spending layer for every Zano holder.</p>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-marker">6</div>
+        <div class="roadmap-body">
+          <div class="tag tag-future">Future</div>
+          <h4>Additional processors &amp; suppliers</h4>
+          <p>Further payment processors and card suppliers onboarded via the plug-and-play integration layer. Each addition takes hours, not weeks — and every new provider increases product coverage, payment optionality, and resilience.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── The Ask ── -->
+<section id="ask">
+  <div class="container">
+    <p class="section-label">What We're Looking For</p>
+    <h2>Community support, <em>ecosystem presence, shared growth.</em></h2>
+    <p class="section-intro">
+      We want to serve the Zano community well — and to do that, we want to build genuine relationships with the people who shape it. Here's where your involvement would make the biggest difference.
+    </p>
+    <div class="ask-grid">
+      <div class="ask-card">
+        <div class="ask-icon">🗂️</div>
+        <h4>Ecosystem listing</h4>
+        <p>A listing on the official Zano ecosystem page or community resources. A simple signal to Zano holders that CardsRelay is a legitimate, recommended place to spend ZANO.</p>
+      </div>
+      <div class="ask-card">
+        <div class="ask-icon">📣</div>
+        <h4>Community ambassadors</h4>
+        <p>Active Zano community members who use the platform and are willing to share their experience. Authentic peer recommendations carry far more weight than any advertising or listing.</p>
+      </div>
+      <div class="ask-card">
+        <div class="ask-icon">🤝</div>
+        <h4>Introductions &amp; partnerships</h4>
+        <p>Introductions to the core Zano team, wallet developers, or other ecosystem projects where a deeper integration — particularly around Freedom Dollar and wallet-level spending — could benefit both communities.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 20px; background: var(--green-glow); border-color: var(--border-g);">
+      <p style="font-size: 15px; line-height: 1.7; color: var(--muted);">
+        CardsRelay is a real business built by a registered company — <span class="bold">Payzy ME FZ Ltd</span> — with a long-term commitment to the ecosystem. ZANO holders are our first and most important audience. We want to earn the community's trust by delivering a product that genuinely serves it, and by being present, reachable, and accountable as we grow.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Company ── -->
+<section id="company">
+  <div class="container">
+    <p class="section-label">The Company</p>
+    <div class="grid-2">
+      <div>
+        <div class="divider"></div>
+        <h2 style="font-size: clamp(22px, 3vw, 32px);">Payzy ME FZ Ltd</h2>
+        <p style="color: var(--muted); font-size: 15px; margin-top: 12px; line-height: 1.7;">
+          CardsRelay is operated by <strong style="color:var(--text)">Payzy ME FZ Ltd</strong>, a registered company incorporated in Nevis (Company No. C 62565), located at Unit 207, Heritage Plaza II, Main Street, Charlestown.
+        </p>
+        <p style="color: var(--muted); font-size: 15px; margin-top: 12px; line-height: 1.7;">
+          CardsRelay operates as an <strong style="color:var(--text)">e-commerce marketplace for digital goods</strong>. Payzy ME FZ Ltd is the merchant of record for all purchases. Cryptocurrency is the payment method — not the product.
+        </p>
+        <p style="color: var(--muted); font-size: 15px; margin-top: 12px; line-height: 1.7;">
+          This is not an anonymous project. It has a registered legal entity, a compliance-reviewed operational framework, and a founder who is reachable and accountable.
+        </p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px; justify-content: center;">
+        <div class="card" style="padding: 16px 20px;">
+          <p style="font-size: 12px; color: var(--muted); margin-bottom: 4px;">Legal entity</p>
+          <p style="font-size: 14px; font-weight: 600;">Payzy ME FZ Ltd</p>
+        </div>
+        <div class="card" style="padding: 16px 20px;">
+          <p style="font-size: 12px; color: var(--muted); margin-bottom: 4px;">Company number</p>
+          <p style="font-size: 14px; font-weight: 600; font-family: var(--mono);">C 62565</p>
+        </div>
+        <div class="card" style="padding: 16px 20px;">
+          <p style="font-size: 12px; color: var(--muted); margin-bottom: 4px;">Jurisdiction</p>
+          <p style="font-size: 14px; font-weight: 600;">Nevis, Caribbean</p>
+        </div>
+        <div class="card" style="padding: 16px 20px;">
+          <p style="font-size: 12px; color: var(--muted); margin-bottom: 4px;">Platform</p>
+          <p style="font-size: 14px; font-weight: 600;"><a href="https://cardsrelay.com" target="_blank" style="color: var(--green-light);">cardsrelay.com ↗</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Contact ── -->
+<section id="contact">
+  <div class="container">
+    <p class="section-label">Get in Touch</p>
+    <h2>Let's talk about <em>how we build this together.</em></h2>
+    <p class="section-intro">
+      If you're active in the Zano community, part of the core team, or simply want to know more about CardsRelay — we'd love to hear from you.
+    </p>
+    <div class="contact-block">
+      <div class="contact-item">
+        <span class="ci-icon">✉️</span>
+        <div>
+          <p style="font-size: 11px; color: var(--muted); margin-bottom: 2px;">Email</p>
+          <a href="mailto:ceo@cardsrelay.com">ceo@cardsrelay.com</a>
+        </div>
+      </div>
+      <div class="contact-item">
+        <span class="ci-icon">💬</span>
+        <div>
+          <p style="font-size: 11px; color: var(--muted); margin-bottom: 2px;">Telegram</p>
+          <a href="https://t.me/definlog" target="_blank">@definlog</a>
+        </div>
+      </div>
+      <div class="contact-item">
+        <span class="ci-icon">🌐</span>
+        <div>
+          <p style="font-size: 11px; color: var(--muted); margin-bottom: 2px;">Platform</p>
+          <a href="https://cardsrelay.com" target="_blank">cardsrelay.com</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="container">
+    <p>© 2025 Payzy ME FZ Ltd · CardsRelay · Company No. C 62565 · Nevis</p>
+    <p style="margin-top: 6px;"><a href="https://cardsrelay.com" target="_blank" style="color: var(--subtle);">cardsrelay.com</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
